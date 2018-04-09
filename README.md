@@ -1,12 +1,9 @@
 # Git Hooks
-The git hooks for Command and Data Handling :octopus:
+The git hooks for GPU_MECAT  
 
 ##INSTALLATION
 
-Download the files using:
-```
-git clone https://github.com/SpaceHAUC-Command-and-Data-Handling/git_hooks.git
-```
+Clone this repo. 
 
 Move the hook_installer script and hooks folder into your bin:
 ```
