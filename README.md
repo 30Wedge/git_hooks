@@ -11,7 +11,7 @@ mv -r hooks ~/bin
 mv hook_installer ~/bin
 ```
 
-## #Optional:
+### Optional:
 You can run
 ```
 echo alias git_init_hooks='git init; hook_installer' >> ~/.bashrc
