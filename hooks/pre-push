@@ -1,0 +1,43 @@
+#!/bin/bash
+
+echo "Running pre-push hook"
+
+
+#float up in MECAT until you're in root dir 
+while [ "basename $(realpath $(dirname .))" -ne "MECAT" ]; do
+    cd ..
+done
+
+#compile latest version 
+make -j 8
+if [ $? -ne 0 ]; then
+    echo "Make failed. push aborted" 
+    exit 1
+fi
+
+##output validity test
+
+#locate fasta file in test/ dir 
+p="./test/*.fasta"
+files=( $p )
+fasta=$(realpath "${files[0]}")
+
+#if you can't find one, download one 
+if [ ! -f $fasta ]; then
+    echo "No fasta file found in ./test; Downloading e_coli sample fasta"
+    cd ./test
+    wget http://nanopore.s3.climb.ac.uk/MAP006-PCR-1_2D_pass.fasta
+    p=*.fasta
+    files=( $p )
+    fasta=$(realpath "${files[0]}")
+    cd ..
+fi
+
+#Shorten the fasta file to cut runtimes
+short_fasta=$fasta.short
+if [ ! -f $short_fasta ]; then
+    head -n 2000 $fasta > $short_fasta
+fi
+
+#run diff check
+exec ./test/diffCheck.sh $short_fasta 
